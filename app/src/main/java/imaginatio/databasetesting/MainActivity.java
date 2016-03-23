@@ -131,7 +131,7 @@ import java.util.List;
                             Log.e("name",w);
 
                            // editText.setText(x);
-                           editText1.setText(e);
+                           editText1.setText(x);
                           //  editText2.setText(h);
                          //   editText3.setText(e);
                             String h= "000000000000000000000000000hhjdfhjksdahfsdjahfjklashdflkhasddlkfhaksdhfkhsadfkhaskdfhaksdhfkashdfhasddlfhalskddhflkjasddhflkjhasdklfhasldjkhfljasddhflkj";
