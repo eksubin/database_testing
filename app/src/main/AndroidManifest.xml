@@ -23,6 +23,7 @@
             android:name=".search_dp"
             android:label="@string/title_activity_search_dp" >
         </activity>
+
     </application>
 
 </manifest>
