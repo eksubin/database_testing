@@ -51,7 +51,7 @@ import java.util.List;
 
         HttpClient httpclient;
         HttpPost httppost;
-        
+        String g;
         //////////////////////////
         TextView myview;
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -59,7 +59,7 @@ import java.util.List;
        TextView editText2;
         Button testbutton;
         Context myne;
-
+        String result = null;
         public void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
@@ -182,7 +182,7 @@ import java.util.List;
 
         public void start(View view) {
             new datasearch(getApplicationContext()).execute();
-            Log.e("messg","started database");
+            Log.e("message","started database");
 
         }
 
@@ -202,7 +202,8 @@ import java.util.List;
            @Override
            protected void onPostExecute(Object o) {
                mNotificationHelper.completed();
-               Log.e("log_tag", "connection success ");
+               //Log.e("log_tag", "connection success ");
+               Log.e("result",g);
            }
 
            @Override
@@ -212,7 +213,7 @@ import java.util.List;
            @Override
            protected Object doInBackground(Object[] objects) {
 
-               
+               InputStream is = null;
                String v1 = "cardiac";
                ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
@@ -220,11 +221,23 @@ import java.util.List;
                try
                {
                    HttpClient httpclient = new DefaultHttpClient();
-                   HttpPost httppost = new HttpPost("http://52.37.65.243/select.php");
+                   HttpPost httppost = new HttpPost("http://192.168.22.130/select.php");
                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                    HttpResponse response = httpclient.execute(httppost);
                    HttpEntity entity = response.getEntity();
-                   InputStream is = entity.getContent();
+                   is = entity.getContent();
+                   BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
+                   StringBuilder sb = new StringBuilder();
+                   String line = null;
+                   while ((line = reader.readLine()) != null)
+                   {
+                       sb.append(line + "\n");
+
+                   }
+                   is.close();
+
+                   result=sb.toString();
+
 
 
 
@@ -235,6 +248,41 @@ import java.util.List;
                 //  Toast.makeText(getApplicationContext(), "Connection fail", Toast.LENGTH_SHORT).show();
 
                }
+
+               try{
+                   JSONObject object = new JSONObject(result);
+                   String ch=object.getString("re");
+                   Log.e("data",ch);
+                   if(ch.equals("success"))
+                   {
+
+                       JSONObject no = object.getJSONObject("0");
+
+                       //long q=object.getLong("f1");
+                       String x = no.getString("f1");
+                       String w= no.getString("f2");
+                       String e=no.getString("f3");
+                        g = no.getString("f4");
+
+
+                   }
+
+
+                   else
+                   {
+
+                    //   Toast.makeText(getApplicationContext(), "Record is not available.. Enter valid number", Toast.LENGTH_SHORT).show();
+
+                   }
+
+
+               }
+               catch(JSONException e)
+               {
+                   Log.e("log_tag", "Error parsing data "+e.toString());
+                  // Toast.makeText(getApplicationContext(), "JsonArray fail", Toast.LENGTH_SHORT).show();
+               }
+
                return null;
            }
        }
