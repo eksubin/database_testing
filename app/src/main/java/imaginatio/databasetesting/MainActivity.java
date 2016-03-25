@@ -75,7 +75,7 @@ import java.util.List;
                     try
                     {
                         HttpClient httpclient = new DefaultHttpClient();
-                        HttpPost httppost = new HttpPost("http://192.168.22.130/select.php");
+                        HttpPost httppost = new HttpPost("http://52.27.3.46/select.php");
                         httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                         HttpResponse response = httpclient.execute(httppost);
                         HttpEntity entity = response.getEntity();
@@ -165,3 +165,4 @@ import java.util.List;
 
         }
 }
+//all updated
