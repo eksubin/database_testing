@@ -55,7 +55,7 @@ import java.util.List;
         String c1="f1",c2="f2",c3="f3",c4="f4",c5="f5",c6="f6",c7="f7";
         String v2=null;
         private Spinner spinner;
-        private static final String[]paths = {"Select", "miRNA", "Mechanism","Disease","Pathways","Etilogy","Target","Fungtions"};   ////Spinner
+        private static final String[]paths = {"Select a Domain you want to search ", "miRNA", "Mechanism","Disease","Pathways","Etilogy","Target","Fungtions"};   ////Spinner
         ///////////////////////
 
         //////////////////////////
@@ -86,7 +86,6 @@ import java.util.List;
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
             sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);      ////shared preference
-            myview = (TextView)findViewById(R.id.hello);
             testbutton = (Button)findViewById(R.id.button);
 
             ////////////////////////////////////////
@@ -104,11 +103,9 @@ import java.util.List;
 
 
             editText = (EditText)findViewById(R.id.e1);
-           final TextView editText1 = (TextView)findViewById(R.id.e2);
 
           //  editText2 = (TextView)findViewById(R.id.e3);
          //   final TextView editText3 = (TextView)findViewById(R.id.e4);
-            Button button = (Button) findViewById(R.id.button1);
             StrictMode.setThreadPolicy(policy);
 
 
@@ -198,7 +195,7 @@ import java.util.List;
            protected Object doInBackground(Object[] objects) {
 
                InputStream is = null;
-               String v1 = "cardiac";
+               String v1 = editText.getText().toString();
               // String v2 = "f4";
                ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 

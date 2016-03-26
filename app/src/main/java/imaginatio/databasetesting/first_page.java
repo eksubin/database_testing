@@ -1,5 +1,6 @@
 package imaginatio.databasetesting;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -7,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class first_page extends ActionBarActivity {
+public class first_page extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
