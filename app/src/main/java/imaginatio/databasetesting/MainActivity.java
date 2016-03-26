@@ -51,38 +51,42 @@ import java.util.List;
 
 
     {
-        ///////////////////////
+        ///////////   Spinner Data  /////////////
+
         String c1="f1",c2="f2",c3="f3",c4="f4",c5="f5",c6="f6",c7="f7";
         String v2=null;
         private Spinner spinner;
-        private static final String[]paths = {"Select a Domain you want to search ", "miRNA", "Mechanism","Disease","Pathways","Etilogy","Target","Fungtions"};   ////Spinner
-        ///////////////////////
+        private static final String[]paths = {"Select a Domain you want to search ", "miRNA", "Mechanism","Disease","Pathways","Etilogy","Target","Fungtions"};
 
-        //////////////////////////
 
-        HttpClient httpclient;          /// Connecting with the database
+        ///////////    HTTP Connection  ///////////////
+
+        HttpClient httpclient;
         HttpPost httppost;
         String mec,des,mi,path,eti;
-        //////////////////////////
 
 
-        ////////////////////////
-        String s,w,e;
+
+        ///////////      Shared Preference Variables/////////////
+
         public static final String MyPREFERENCES = "MyPrefs" ;
-        public static final String mirna = "mir";                   //////Shared preference
+        public static final String mirna = "mir";
         public static final String mechanism = "mech";
         public static final String desease = "dese";
         public static final String pathway = "path";
         public static final String etilogy = "etil";
         SharedPreferences sharedpreferences;
-        ////////////////////////
-        TextView myview;
+
+
+       /////////////        Extra Variables       /////////////////
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         EditText editText;
-       TextView editText2;
         Button testbutton;
-        Context myne;
         String result = null;
+        Boolean alldataentered=false;
+
+
         public void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
@@ -90,40 +94,24 @@ import java.util.List;
             sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);      ////shared preference
             testbutton = (Button)findViewById(R.id.button);
 
-            ////////////////////////////////////////
+            ////////////////////   Spinner  ////////////////////
+
             spinner = (Spinner)findViewById(R.id.spinner);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
-                    android.R.layout.simple_spinner_item,paths);
-
+            android.R.layout.simple_spinner_item,paths);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);      /////////Spinner
            spinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
             spinner.setAdapter(adapter);
-            ///////////////////////////////////
 
-
-
-
-
-            editText = (EditText)findViewById(R.id.e1);
-
-          //  editText2 = (TextView)findViewById(R.id.e3);
-         //   final TextView editText3 = (TextView)findViewById(R.id.e4);
+             editText = (EditText)findViewById(R.id.e1);
             StrictMode.setThreadPolicy(policy);
-
-
-
-
 
         }
 
         public void start(View view) {
-            new datasearch(getApplicationContext()).execute();
-            Log.e("message","started database");
 
+                new datasearch(getApplicationContext()).execute();
         }
-
-
-
 
 
         @Override
@@ -172,14 +160,12 @@ import java.util.List;
            @Override
            protected void onPreExecute() {
                mNotificationHelper.createNotification();
-               Log.e("connection status","started connecting with server");
+              // Log.e("connection status","started connecting with server");
            }
 
            @Override
            protected void onPostExecute(Object o) {
                mNotificationHelper.completed();
-               //Log.e("log_tag", "connection success ");
-//               Log.e("result",g);
                SharedPreferences.Editor editor = sharedpreferences.edit();
                editor.putString(mirna, mi);
                editor.putString(mechanism, mec);
@@ -187,8 +173,14 @@ import java.util.List;
                editor.putString(pathway,path);
                editor.putString(etilogy,eti);
                editor.apply();
-               Intent call_page = new Intent(getApplicationContext(),data.class);
-               startActivity(call_page);
+               if (alldataentered) {
+                   Intent call_page = new Intent(getApplicationContext(), data.class);
+                   startActivity(call_page);
+               }
+               else
+               {
+                   Toast.makeText(getApplicationContext(),"sorry data not available",Toast.LENGTH_LONG).show();
+               }
            }
 
            @Override
@@ -200,7 +192,6 @@ import java.util.List;
 
                InputStream is = null;
                String v1 = editText.getText().toString();
-              // String v2 = "f4";
                ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
                nameValuePairs.add(new BasicNameValuePair("f1",v1));
@@ -226,22 +217,20 @@ import java.util.List;
                    result=sb.toString();
 
 
-
-
                }
                catch(Exception e)
                {
                    Log.e("log_tag", "Error in http connection "+e.toString());
-                //  Toast.makeText(getApplicationContext(), "Connection fail", Toast.LENGTH_SHORT).show();
 
                }
 
                try{
                    JSONObject object = new JSONObject(result);
                    String ch=object.getString("re");
-                   Log.e("data",ch);
+                   //Log.e("data",ch);
                    if(ch.equals("success"))
                    {
+                       alldataentered = true;
 
                        JSONObject no = object.getJSONObject("0");
 
@@ -255,11 +244,9 @@ import java.util.List;
                    }
 
 
-                   else
+                  else
                    {
-
-                    //   Toast.makeText(getApplicationContext(), "Record is not available.. Enter valid number", Toast.LENGTH_SHORT).show();
-
+                       alldataentered = false;
                    }
 
 
@@ -267,11 +254,10 @@ import java.util.List;
                catch(JSONException e)
                {
                    Log.e("log_tag", "Error parsing data "+e.toString());
-                  // Toast.makeText(getApplicationContext(), "JsonArray fail", Toast.LENGTH_SHORT).show();
+
                }
 
                return null;
            }
        }
 }
-//all updated

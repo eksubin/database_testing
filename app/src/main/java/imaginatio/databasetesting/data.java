@@ -1,5 +1,6 @@
 package imaginatio.databasetesting;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -54,6 +55,8 @@ TextView mech,mir,des,path,eti;
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent call_about = new Intent(getApplicationContext(),About.class);
+            startActivity(call_about);
             return true;
         }
 
