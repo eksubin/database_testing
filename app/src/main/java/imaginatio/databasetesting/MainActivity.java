@@ -6,6 +6,7 @@ import android.app.Notification;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v4.app.NotificationCompat;
@@ -16,9 +17,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,16 +47,33 @@ import java.util.List;
 
 
 
-    public class MainActivity extends Activity
-        
-       
+    public class MainActivity extends Activity implements AdapterView.OnItemSelectedListener
+
+
     {
+        ///////////////////////
+        String c1="f1",c2="f2",c3="f3",c4="f4",c5="f5",c6="f6",c7="f7";
+        String v2=null;
+        private Spinner spinner;
+        private static final String[]paths = {"Select", "miRNA", "Mechanism","Disease","Pathways","Etilogy","Target","Fungtions"};   ////Spinner
+        ///////////////////////
+
         //////////////////////////
 
-        HttpClient httpclient;
+        HttpClient httpclient;          /// Connecting with the database
         HttpPost httppost;
         String g;
         //////////////////////////
+
+
+        ////////////////////////
+        String s,w,e;
+        public static final String MyPREFERENCES = "MyPrefs" ;
+        public static final String Name = "name";                   //////Shared preference
+        public static final String Phone = "phone";
+        public static final String Email = "emailKey";
+        SharedPreferences sharedpreferences;
+        ////////////////////////
         TextView myview;
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         EditText editText;
@@ -64,9 +85,22 @@ import java.util.List;
         {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
-
+            sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);      ////shared preference
             myview = (TextView)findViewById(R.id.hello);
             testbutton = (Button)findViewById(R.id.button);
+
+            ////////////////////////////////////////
+            spinner = (Spinner)findViewById(R.id.spinner);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
+                    android.R.layout.simple_spinner_item,paths);
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);      /////////Spinner
+           spinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
+            spinner.setAdapter(adapter);
+            ///////////////////////////////////
+
+
+
 
 
             editText = (EditText)findViewById(R.id.e1);
@@ -186,6 +220,46 @@ import java.util.List;
 
         }
 
+
+
+
+
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+            switch (position) {
+                case 0:
+                    break;
+                case 1:
+                    v2=c1;
+                    break;
+                case 2:
+                    v2=c2;
+                    break;
+                case 3:
+                    v2=c3;
+                    break;
+                case 4:
+                    v2=c4;
+                    break;
+                case 5:
+                    v2=c5;
+                    break;
+                case 6:
+                    v2=c6;
+                    break;
+                case 7:
+                    v2=c7;
+                    break;
+
+            }
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+
         public class datasearch extends AsyncTask{
            private Nothelper mNotificationHelper;
            public datasearch(Context context)
@@ -203,7 +277,14 @@ import java.util.List;
            protected void onPostExecute(Object o) {
                mNotificationHelper.completed();
                //Log.e("log_tag", "connection success ");
-               Log.e("result",g);
+//               Log.e("result",g);
+               SharedPreferences.Editor editor = sharedpreferences.edit();
+               editor.putString(Name, g);
+               editor.putString(Phone, w);
+               editor.putString(Email, e);
+               editor.apply();
+               Intent call_page = new Intent(getApplicationContext(),data.class);
+               startActivity(call_page);
            }
 
            @Override
@@ -215,13 +296,15 @@ import java.util.List;
 
                InputStream is = null;
                String v1 = "cardiac";
+              // String v2 = "f4";
                ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
                nameValuePairs.add(new BasicNameValuePair("f1",v1));
+               nameValuePairs.add(new BasicNameValuePair("f2",v2));
                try
                {
                    HttpClient httpclient = new DefaultHttpClient();
-                   HttpPost httppost = new HttpPost("http://192.168.22.130/select.php");
+                   HttpPost httppost = new HttpPost("http://52.37.65.243/select.php");
                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                    HttpResponse response = httpclient.execute(httppost);
                    HttpEntity entity = response.getEntity();
