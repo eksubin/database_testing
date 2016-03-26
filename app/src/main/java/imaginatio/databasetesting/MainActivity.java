@@ -62,16 +62,18 @@ import java.util.List;
 
         HttpClient httpclient;          /// Connecting with the database
         HttpPost httppost;
-        String g;
+        String mec,des,mi,path,eti;
         //////////////////////////
 
 
         ////////////////////////
         String s,w,e;
         public static final String MyPREFERENCES = "MyPrefs" ;
-        public static final String Name = "name";                   //////Shared preference
-        public static final String Phone = "phone";
-        public static final String Email = "emailKey";
+        public static final String mirna = "mir";                   //////Shared preference
+        public static final String mechanism = "mech";
+        public static final String desease = "dese";
+        public static final String pathway = "path";
+        public static final String etilogy = "etil";
         SharedPreferences sharedpreferences;
         ////////////////////////
         TextView myview;
@@ -179,9 +181,11 @@ import java.util.List;
                //Log.e("log_tag", "connection success ");
 //               Log.e("result",g);
                SharedPreferences.Editor editor = sharedpreferences.edit();
-               editor.putString(Name, g);
-               editor.putString(Phone, w);
-               editor.putString(Email, e);
+               editor.putString(mirna, mi);
+               editor.putString(mechanism, mec);
+               editor.putString(desease, des);
+               editor.putString(pathway,path);
+               editor.putString(etilogy,eti);
                editor.apply();
                Intent call_page = new Intent(getApplicationContext(),data.class);
                startActivity(call_page);
@@ -241,11 +245,11 @@ import java.util.List;
 
                        JSONObject no = object.getJSONObject("0");
 
-                       //long q=object.getLong("f1");
-                       String x = no.getString("f1");
-                       String w= no.getString("f2");
-                       String e=no.getString("f3");
-                        g = no.getString("f4");
+                       mi = no.getString("f1");
+                       mec= no.getString("f2");
+                       des=no.getString("f3");
+                        path = no.getString("f4");
+                       eti = no.getString("f5");
 
 
                    }

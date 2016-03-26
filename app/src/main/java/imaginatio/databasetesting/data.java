@@ -11,18 +11,31 @@ import android.widget.Toast;
 
 
 public class data extends ActionBarActivity {
-TextView mech;
+TextView mech,mir,des,path,eti;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-     mech = (TextView)findViewById(R.id.mechanism);
 
-            String name = prefs.getString("name", null);//"No name defined" is the default value.
-           // Toast.makeText(getApplicationContext(),name,Toast.LENGTH_LONG).show();
-Log.e("msg",name);
-        mech.setText(name);
+        mech = (TextView)findViewById(R.id.mechanism_dats);
+        mir = (TextView)findViewById(R.id.mirna_data);
+        des = (TextView)findViewById(R.id.disease_data);
+        path = (TextView)findViewById(R.id.pathway_data);
+        eti = (TextView)findViewById(R.id.etilogy_data);
+
+
+        String mirna = prefs.getString("mir", null);
+        String mechanism = prefs.getString("mech", null);
+        String desease = prefs.getString("dese", null);
+        String pathways = prefs.getString("path", null);
+        String etilogy = prefs.getString("etil",null);
+
+        mech.setText(mechanism);
+        mir.setText(mirna);
+        des.setText(desease);
+        path.setText(pathways);
+        eti.setText(etilogy);
 
     }
 
@@ -36,9 +49,7 @@ Log.e("msg",name);
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
