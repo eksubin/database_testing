@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
         android:gravity="center_horizontal"
-        android:background="@drawable/easybuy_logo_edited_1"
+        android:background="@drawable/about"
         android:layout_above="@+id/textView2"
         android:layout_centerHorizontal="true" />
 

@@ -150,6 +150,11 @@ import java.util.List;
 
         }
 
+        public void call_about(View view) {
+            Intent i = new Intent(getApplication(), About.class);
+            startActivity(i);
+        }
+
         public class datasearch extends AsyncTask{
            private Nothelper mNotificationHelper;
            public datasearch(Context context)
